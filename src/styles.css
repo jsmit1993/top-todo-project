@@ -11,3 +11,24 @@
     justify-content: center;
     align-items: center;
 }
+
+.sideBar {
+    background-color: #E3E7EB;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 150px;
+}
+.newProjBut{
+    margin: 0px;
+}
+.submitBtn {
+    background-color: deepskyblue;
+}
+
+button {
+    margin: 10px;
+    padding: 5px;
+    border-radius: 15px;
+}
