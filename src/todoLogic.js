@@ -30,6 +30,7 @@ let projects = [];
 function addTask(title, description, dueDate, tag, completed, project, projectID, taskID) {
     let newTask = new Todo(title, description, dueDate, tag, completed, project, projectID, taskID);
     tasks.push(newTask);
+    console.log(newTask);
 }
 
 function addProject(name, description, status, projectID) {
