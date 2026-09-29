@@ -78,3 +78,41 @@ form {
     flex-direction: column;
     max-width: 75px;
 }
+
+.taskListArea, .taskHeader, .individualTaskListArea {
+    background-color: lightblue;
+}
+.taskListArea {
+    display: flex;
+    flex-direction: column;
+}
+
+.taskHeaderh2 {
+    padding: 10px;
+    margin: 5px;
+}
+.individualTaskListArea {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(75px, 250px));
+    gap: 10px;
+}
+.individualTask {
+    background-color: burlywood;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+
+}
+
+.deleteButton {
+    background-color: crimson;
+}
+
+.editButton {
+    background-color: cornflowerblue;
+}
+
+.editTaskModal {
+    display: flex;
+    flex-direction: column;
+}

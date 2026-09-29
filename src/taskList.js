@@ -1,5 +1,6 @@
+import { showEditTaskModal } from "./domLogic";
 import { mainPageLoad } from "./initialLoad";
-import { addTask, projects, tasks } from "./todoLogic";
+import { addTask, projects, tasks, deleteTask, editTask } from "./todoLogic";
 
 function buildTaskDiv(task) {
     const individualTask = document.createElement('div');
@@ -11,7 +12,7 @@ function buildTaskDiv(task) {
 
     const individualDescription = document.createElement('p');
     individualDescription.classList.add('individualDescipt');
-    individualDescription.textContent = task.description;
+    individualDescription.textContent = 'Description: ' + task.description;
 
     const individalDueDate = document.createElement('p');
     individalDueDate.classList.add('individualDueDate');
@@ -29,6 +30,21 @@ function buildTaskDiv(task) {
     individualCompetion.classList.add('individualComp');
     individualCompetion.textContent = task.completed;
 
+    const editBtn = document.createElement('button');
+    editBtn.classList.add('editButton');
+    editBtn.textContent = 'Edit Task';
+    editBtn.addEventListener('click', () => {
+        showEditTaskModal(task);
+        
+    })
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('deleteButton');
+    deleteBtn.textContent = 'Delete';
+    deleteBtn.addEventListener('click', () => {
+        deleteTask(task.taskID);
+        mainPageLoad();
+    });
     
     individualTask.appendChild(individualTaskTitle);
     individualTask.appendChild(individualDescription);
@@ -37,6 +53,8 @@ function buildTaskDiv(task) {
     individualTask.appendChild(individualProject);
 
     individualTask.appendChild(individualCompetion);
+    individualTask.appendChild(editBtn);
+    individualTask.appendChild(deleteBtn);
     return individualTask;
 }
 
@@ -163,16 +181,26 @@ function addTaskfromForm(e) {
 
 function buildTasks() {
     const taskSectionTitle = document.createElement('div');
-    taskSectionTitle.classList.add('taskListArea')
+    taskSectionTitle.classList.add('taskListArea');
+    const taskSectionHeaderDiv = document.createElement('div');
+    taskSectionHeaderDiv.classList.add('taskHeader');
     const taskSectionHeader = document.createElement('h2');
-    taskSectionHeader.classList.add('taskHeader');
+    taskSectionHeader.classList.add('taskHeaderh2');
     taskSectionHeader.textContent = 'Task List';
 
-    taskSectionTitle.appendChild(taskSectionHeader);
+    const projectSearch = document.createElement('label');
+
+    taskSectionHeaderDiv.appendChild(taskSectionHeader);
+    taskSectionTitle.appendChild(taskSectionHeaderDiv);
+
+    const taskList = document.createElement('div');
+    taskList.classList.add('individualTaskListArea');
+
 
     tasks.forEach(task => {
-        taskSectionTitle.appendChild(buildTaskDiv(task))
+        taskList.appendChild(buildTaskDiv(task))
     })
+    taskSectionTitle.appendChild(taskList)
     return taskSectionTitle
 }
 
