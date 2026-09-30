@@ -2,6 +2,8 @@ import { showEditTaskModal } from "./domLogic";
 import { mainPageLoad } from "./initialLoad";
 import { addTask, projects, tasks, deleteTask, editTask } from "./todoLogic";
 
+let activeFilter = 'all';
+
 function buildTaskDiv(task) {
     const individualTask = document.createElement('div');
     individualTask.classList.add('individualTask');
@@ -16,19 +18,19 @@ function buildTaskDiv(task) {
 
     const individalDueDate = document.createElement('p');
     individalDueDate.classList.add('individualDueDate');
-    individalDueDate.textContent = task.dueDate;
+    individalDueDate.textContent = 'Due Date: ' + task.dueDate;
 
     const individualTag = document.createElement('p');
     individualTag.classList.add('individualTag');
-    individualTag.textContent = task.tag;
+    individualTag.textContent = 'Tag: ' + task.tag;
 
     const individualProject = document.createElement('p');
     individualProject.classList.add('individualProject');
-    individualProject.textContent = task.project;
+    individualProject.textContent = 'Project: ' + task.project;
 
     const individualCompetion = document.createElement('p');
     individualCompetion.classList.add('individualComp');
-    individualCompetion.textContent = task.completed;
+    individualCompetion.textContent = 'Completed: ' + task.completed;
 
     const editBtn = document.createElement('button');
     editBtn.classList.add('editButton');
@@ -182,26 +184,75 @@ function addTaskfromForm(e) {
 function buildTasks() {
     const taskSectionTitle = document.createElement('div');
     taskSectionTitle.classList.add('taskListArea');
+    
     const taskSectionHeaderDiv = document.createElement('div');
     taskSectionHeaderDiv.classList.add('taskHeader');
+    
     const taskSectionHeader = document.createElement('h2');
     taskSectionHeader.classList.add('taskHeaderh2');
     taskSectionHeader.textContent = 'Task List';
-
-    const projectSearch = document.createElement('label');
-
     taskSectionHeaderDiv.appendChild(taskSectionHeader);
+
+    // 1. Create a dedicated container row for our filter buttons toolbar
+    const filterToolbar = document.createElement('div');
+    filterToolbar.classList.add('filterToolbar');
+
+    // 2. Build the default "View All Tasks" static button
+    const viewAllBtn = document.createElement('button');
+    viewAllBtn.type = 'button';
+    viewAllBtn.textContent = 'All Tasks';
+    viewAllBtn.classList.add('filterBtn');
+    
+    // Add an 'active' style helper class if this button matches the saved filter state
+    if (activeFilter === 'all') viewAllBtn.classList.add('activeFilter');
+    
+    viewAllBtn.addEventListener('click', () => triggerFilter('all'));
+    filterToolbar.appendChild(viewAllBtn);
+
+    // 3. Loop through your projects array to build project-specific buttons dynamically
+    projects.forEach(project => {
+        const projBtn = document.createElement('button');
+        projBtn.type = 'button';
+        projBtn.textContent = project.name;
+        projBtn.classList.add('filterBtn');
+
+        if (activeFilter === project.projectID) {
+            projBtn.classList.add('activeFilter');
+        }
+
+        projBtn.addEventListener('click', () => triggerFilter(project.projectID));
+        filterToolbar.appendChild(projBtn);
+    });
+
+    taskSectionHeaderDiv.appendChild(filterToolbar);
     taskSectionTitle.appendChild(taskSectionHeaderDiv);
 
+    // 4. Render the filtered cards collection below the toolbar row
     const taskList = document.createElement('div');
     taskList.classList.add('individualTaskListArea');
 
+    const displayTasks = tasks.filter(task => {
+        if (activeFilter === 'all') return true;
+        return task.projectID === activeFilter;
+    });
 
-    tasks.forEach(task => {
-        taskList.appendChild(buildTaskDiv(task))
-    })
-    taskSectionTitle.appendChild(taskList)
-    return taskSectionTitle
+    displayTasks.forEach(task => {
+        taskList.appendChild(buildTaskDiv(task));
+    });
+    
+    taskSectionTitle.appendChild(taskList);
+    return taskSectionTitle;
+}
+
+// 5. Shared state adjustment abstraction utility
+function triggerFilter(filterID) {
+    activeFilter = filterID;
+    const taskArea = document.querySelector('.taskArea'); 
+    if (taskArea) {
+        taskArea.innerHTML = '';
+        taskArea.appendChild(buildTaskForm()); 
+        taskArea.appendChild(buildTasks()); // Re-run loop with newly assigned activeFilter
+    }
 }
 
 function buildTaskSection() {

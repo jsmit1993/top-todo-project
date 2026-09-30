@@ -71,6 +71,7 @@ form {
     grid-row: 2;
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 
 .addTaskdiv1 {
@@ -79,12 +80,22 @@ form {
     max-width: 75px;
 }
 
+label {
+    margin: 3px;
+    padding: 3px;
+}
+
 .taskListArea, .taskHeader, .individualTaskListArea {
     background-color: lightblue;
 }
 .taskListArea {
     display: flex;
     flex-direction: column;
+}
+.taskHeader{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .taskHeaderh2 {

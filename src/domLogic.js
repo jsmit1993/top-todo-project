@@ -11,7 +11,6 @@ function listProjectsSideBar() {
         div.textContent = project.name;
         projectList.appendChild(div);
     });    
-
     return projectList;
 }
 
